@@ -19,8 +19,9 @@ export async function GET (
             include: {
                 images: true,
                 category: true,
+                subcategory: true,
                 size: true,
-                color: true
+                color: true,
             }    
         });
 
@@ -83,11 +84,13 @@ export async function PATCH (
             name,
             price,
             categoryId,
+            subcategoryId,
             colorId,
             sizeId,
             images,
             isFeatured,
             isArchived,
+            description,
          } = body;
 
         if (!userId){
@@ -109,13 +112,9 @@ export async function PATCH (
         if (!categoryId) {
             return new NextResponse("Category id is required", { status: 400 });
         }
-    
-        if (!colorId) {
-            return new NextResponse("Color id is required", { status: 400 });
-        }
-    
-        if (!sizeId) {
-            return new NextResponse("Size id is required", { status: 400 });
+
+        if (!subcategoryId) {
+            return new NextResponse("Subcategory id is required", { status: 400 });
         }
 
         if (!params.productId) {
@@ -141,13 +140,15 @@ export async function PATCH (
                 name,
                 price,
                 categoryId,
+                subcategoryId,
                 colorId,
                 sizeId,
                 images: {
                     deleteMany: {}
                 },
                 isFeatured,
-                isArchived
+                isArchived,
+                description
             }
         });
 

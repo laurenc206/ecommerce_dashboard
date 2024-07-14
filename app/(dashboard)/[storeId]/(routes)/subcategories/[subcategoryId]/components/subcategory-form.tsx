@@ -3,10 +3,10 @@
 import * as z from "zod";
 import axios from "axios";
 import { useState } from 'react'
+import { Category, Subcategory } from '@prisma/client';
 import { Trash } from 'lucide-react';
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { Category, Billboard } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 
@@ -18,32 +18,26 @@ import { Form,
          FormField, 
          FormItem, 
          FormLabel, 
-         FormMessage
-} from "@/components/ui/form";
+         FormMessage} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { Select, 
-         SelectTrigger, 
-         SelectValue, 
-         SelectContent, 
-         SelectItem
-} from "@/components/ui/select";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 const formSchema = z.object({
     name: z.string().min(1),
-    billboardId: z.string().min(1)
+    categoryId: z.string().min(1),
 });
 
-type CategoryFormValues = z.infer<typeof formSchema>
+type SubcategoryFormValues = z.infer<typeof formSchema>
 
-interface CategoryFormProps {
-    initialData: Category | null,
-    billboards: Billboard[];
+interface SubcategoryFormProps {
+    categories: Category[];
+    initialData: Subcategory | null;
 };
 
-export const CategoryForm: React.FC<CategoryFormProps> = ({
+export const SubcategoryForm: React.FC<SubcategoryFormProps> = ({
     initialData,
-    billboards
+    categories
 }) => {
     const params = useParams();
     const router = useRouter();
@@ -51,29 +45,29 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const title = initialData ? "Edit category" : "Create category";
-    const description = initialData ? "Edit a category" : "Add a new category";
-    const toastMessage = initialData ? "Category updated." : "Category created.";
+    const title = initialData ? "Edit subcategory" : "Create subcategory";
+    const description = initialData ? "Edit a subcategory" : "Add a new subcategory";
+    const toastMessage = initialData ? "Subcategory updated." : "Subcategory created.";
     const action = initialData ? "Save changes" : "Create";
 
-    const form = useForm<CategoryFormValues>({
+    const form = useForm<SubcategoryFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
             name: '',
-            billboardId: ''
+            categoryId: ''
         }
     });
 
-    const onSubmit = async (data: CategoryFormValues) => {
+    const onSubmit = async (data: SubcategoryFormValues) => {
         try {
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/${params.storeId}/categories/${params.categoryId}`, data);
+                await axios.patch(`/api/${params.storeId}/subcategories/${params.subcategoryId}`, data);
             } else {
-                await axios.post(`/api/${params.storeId}/categories`, data);
+                await axios.post(`/api/${params.storeId}/subcategories`, data);
             }
             router.refresh();
-            router.push(`/${params.storeId}/categories`)
+            router.push(`/${params.storeId}/subcategories`)
             toast.success(toastMessage);
         } catch (error) {
             toast.error("Something went wrong.");
@@ -85,12 +79,12 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     const onDelete = async () => {
         try {
             setLoading(true)
-            await axios.delete(`/api/${params.storeId}/categories/${params.categoryId}`);
+            await axios.delete(`/api/${params.storeId}/subcategories/${params.subcategoryId}`);
             router.refresh();
-            router.push(`/${params.storeId}/categories`);
-            toast.success("Category deleted.");
+            router.push(`/${params.storeId}/subcategories`);
+            toast.success("Subcategory deleted.");
         } catch (error) {
-            toast.error("Make sure you removed all subcategories using this category first.");
+            toast.error("Make sure you removed all products using this subcategory first.");
         } finally {
             setLoading(false);
             setOpen(false);
@@ -124,6 +118,8 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             <Separator />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+
+                    
                     <div className="md:grid md:grid-cols-3 gap-8">
                         <FormField
                             control={form.control}
@@ -132,7 +128,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Category name" {...field} />
+                                        <Input disabled={loading} placeholder="Subcategory name" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -140,40 +136,41 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                         />
                         <FormField
                             control={form.control}
-                            name="billboardId"
+                            name="categoryId"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Billboard</FormLabel>
-                                    <Select 
-                                        disabled={loading} 
-                                        onValueChange={field.onChange} 
-                                        value={field.value} 
-                                        defaultValue={field.value}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger >
-                                                <SelectValue
-                                                    defaultValue={field.value}
-                                                    placeholder="Select a billboard"
-                                                />
+                                    <FormLabel>Category</FormLabel>
+                                        <Select
+                                            disabled={loading}
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue
+                                                        defaultValue={field.value}
+                                                        placeholder="Select a category"
+                                                    />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {categories.map((category) => (
+                                                    <SelectItem
+                                                        key={category.id}
+                                                        value={category.id}
+                                                    >
+                                                        {category.name}
+                                                    </SelectItem>
+                                                )) }
 
-
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {billboards.map((billboard) => (
-                                                <SelectItem
-                                                    key={billboard.id}
-                                                    value={billboard.id}>
-                                                    {billboard.label}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                            </SelectContent>
+                                        </Select>
                                     <FormMessage/>
                                 </FormItem>
                             )}
                         />
+
                     </div>
                     <Button disabled={loading} className="ml-auto" type="submit">
                         {action}

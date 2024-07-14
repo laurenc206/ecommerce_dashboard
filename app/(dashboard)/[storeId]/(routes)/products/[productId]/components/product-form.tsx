@@ -3,7 +3,7 @@
 import * as z from "zod";
 import axios from "axios";
 import { useState } from 'react'
-import { Product, Image, Category, Color, Size } from '@prisma/client';
+import { Product, Image, Category, Color, Size, Subcategory } from '@prisma/client';
 import { Trash } from 'lucide-react';
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -31,14 +31,17 @@ import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
 import ImageUpload from "@/components/ui/image-upload";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
     name: z.string().min(1),
     images: z.object({ url: z.string() }).array(),
     price: z.coerce.number().min(1),
     categoryId: z.string().min(1),
-    colorId: z.string().min(1),
-    sizeId: z.string().min(1),
+    subcategoryId: z.string().min(1),
+    colorId: z.string().nullable().optional(),
+    sizeId: z.string().nullable().optional(),
+    description: z.string().optional(),
     isFeatured: z.boolean().default(false).optional(),
     isArchived: z.boolean().default(false).optional(),
 });
@@ -50,6 +53,7 @@ interface ProductFormProps {
         images: Image[]
     } | null;
     categories: Category[];
+    subcategories: Subcategory[];
     colors: Color[];
     sizes: Size[];
 };
@@ -57,6 +61,7 @@ interface ProductFormProps {
 export const ProductForm: React.FC<ProductFormProps> = ({
     initialData,
     categories,
+    subcategories,
     sizes,
     colors
 }) => {
@@ -65,7 +70,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-
+   
     const title = initialData ? "Edit product" : "Create product";
     const description = initialData ? "Edit a product" : "Add a new product";
     const toastMessage = initialData ? "Product updated." : "Product created.";
@@ -79,8 +84,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         images: [],
         price: 0,
         categoryId: '',
-        colorId: '',
-        sizeId: '',
+        subcategoryId: '',
+        description: '',
         isFeatured: false,
         isArchived: false,
       }
@@ -90,9 +95,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         defaultValues
     });
 
+    const watchCategories = form.watch("categoryId");
+    
     const onSubmit = async (data: ProductFormValues) => {
+        console.log(JSON.stringify(data))
         try {
             setLoading(true);
+            
             if (initialData) {
                 await axios.patch(`/api/${params.storeId}/products/${params.productId}`, data);
             } else {
@@ -153,11 +162,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     <FormField
                         control={form.control}
                         name="images"
+                        
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Images</FormLabel>
                                 <FormControl>
                                     <ImageUpload 
+                                        
                                         value={field.value.map((image) => image.url)}
                                         disabled={loading}
                                         onChange={(url) => field.onChange([...field.value, { url }])}
@@ -198,6 +209,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         />
                         <FormField
                             control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea disabled={loading} rows={3} placeholder="Write description here" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
                             name="categoryId"
                             render={({ field }) => (
                                 <FormItem>
@@ -230,6 +254,43 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                 </FormItem>
                             )}
                         />
+                        
+                        <FormField
+                            control={form.control}
+                            name="subcategoryId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Subcategory</FormLabel>
+                                    <Select 
+                                        disabled={loading || watchCategories === defaultValues.categoryId} 
+                                        onValueChange={field.onChange} 
+                                        value={field.value} 
+                                        defaultValue={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger >
+                                                <SelectValue
+                                                    defaultValue={field.value}
+                                                    placeholder="Select a subcategory"
+                                                />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {subcategories.filter(s => s.categoryId === watchCategories).map((subcategory) => 
+                                            
+                                                <SelectItem
+                                                    key={subcategory.id}
+                                                    value={subcategory.id}>
+                                                    {subcategory.name}
+                                                </SelectItem>
+                                            )}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
                         <FormField
                             control={form.control}
                             name="sizeId"
@@ -239,13 +300,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                     <Select 
                                         disabled={loading} 
                                         onValueChange={field.onChange} 
-                                        value={field.value} 
-                                        defaultValue={field.value}
+                                        value={field.value ? field.value : undefined} 
+                                        
                                     >
                                         <FormControl>
                                             <SelectTrigger >
                                                 <SelectValue
-                                                    defaultValue={field.value}
+                                                    
                                                     placeholder="Select a size"
                                                 />
                                             </SelectTrigger>
@@ -274,13 +335,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                     <Select 
                                         disabled={loading} 
                                         onValueChange={field.onChange} 
-                                        value={field.value} 
-                                        defaultValue={field.value}
+                                        value={field.value ? field.value : undefined} 
+                                        
                                     >
                                         <FormControl>
                                             <SelectTrigger >
                                                 <SelectValue
-                                                    defaultValue={field.value}
+                                                    
                                                     placeholder="Select a color"
                                                 />
                                             </SelectTrigger>
