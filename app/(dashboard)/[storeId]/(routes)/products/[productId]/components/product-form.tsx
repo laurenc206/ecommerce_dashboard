@@ -44,6 +44,7 @@ const formSchema = z.object({
     description: z.string().optional(),
     isFeatured: z.boolean().default(false).optional(),
     isArchived: z.boolean().default(false).optional(),
+    isLocked: z.boolean().default(true)
 });
 
 type ProductFormValues = z.infer<typeof formSchema>
