@@ -50,7 +50,7 @@ const ProductPage = async ({
                     subcategories={subcategories}
                     colors={colors}
                     sizes={sizes}
-                    initialData={product} />
+                    initialData={JSON.parse(JSON.stringify(product))} />
             </div>
         </div>
     );

@@ -57,14 +57,23 @@ export async function DELETE (
         if (!storeByUserId) {
             return new NextResponse("Unauthorized", { status: 405 });
         }
-
-        const product = await prismadb.product.delete({
+        const product = await prismadb.product.findFirst({
             where: {
                 id: params.productId,
             },    
         });
 
-        return NextResponse.json(product);
+        if (product?.isLocked) {
+            return new NextResponse("Unauthorized", { status: 401 })
+        }
+
+        const res = await prismadb.product.delete({
+            where: {
+                id: params.productId,
+            },    
+        });
+
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[PRODUCT_DELETE]', error);
         return new NextResponse("Internal error", { status: 500 });
@@ -90,12 +99,15 @@ export async function PATCH (
             images,
             isFeatured,
             isArchived,
+            isLocked,
             description,
          } = body;
 
         if (!userId){
             return new NextResponse("Unauthenticated", { status: 403 });
         }
+
+  
 
         if (!name) {
             return new NextResponse("Name is required", { status: 400 });

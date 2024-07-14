@@ -229,9 +229,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                     <FormLabel>Category</FormLabel>
                                     <Select 
                                         disabled={loading} 
-                                        onValueChange={field.onChange} 
+                                        onValueChange={(e) => {
+                                            form.setValue("categoryId", e)
+                                            form.setValue("subcategoryId", "")
+                                        }}
                                         value={field.value} 
                                         defaultValue={field.value}
+                                        
                                     >
                                         <FormControl>
                                             <SelectTrigger >
@@ -241,11 +245,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                                 />
                                             </SelectTrigger>
                                         </FormControl>
-                                        <SelectContent>
+                                        <SelectContent
+                                            onSelect={() => form.setValue("subcategoryId", "")}
+                                        >
                                             {categories.map((category) => (
                                                 <SelectItem
                                                     key={category.id}
                                                     value={category.id}>
+                                                    
                                                     {category.name}
                                                 </SelectItem>
                                             ))}
@@ -263,7 +270,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                 <FormItem>
                                     <FormLabel>Subcategory</FormLabel>
                                     <Select 
-                                        disabled={loading || watchCategories === defaultValues.categoryId} 
+                                        disabled={loading || (watchCategories === '') } 
                                         onValueChange={field.onChange} 
                                         value={field.value} 
                                         defaultValue={field.value}
@@ -313,6 +320,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
+                                            <SelectItem
+                                                    key={"blank_size"}
+                                                    value={""}>
+                                                    <div className="h-[18px]"></div>
+                                            </SelectItem>
                                             {sizes.map((size) => (
                                                 <SelectItem
                                                     key={size.id}
@@ -348,6 +360,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
+                                            <SelectItem
+                                                    key={"blank_color"}
+                                                    value={""}>
+                                                    <div className="h-[18px]"></div>
+                                            </SelectItem>
                                             {colors.map((color) => (
                                                 <SelectItem
                                                     key={color.id}
