@@ -13,6 +13,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
   title: 'Admin Dashboard',
   description: 'Admin Dashboard',
+  
 }
 
 export default function RootLayout({
@@ -22,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <ToasterProvider />

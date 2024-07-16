@@ -1,40 +1,26 @@
+"use client"
 import { UserButton, auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-import { MainNav } from "@/components/main-nav";
 import StoreSwitcher from "@/components/store-switcher";
 import prismadb from "@/lib/prismadb";
 import { ThemeToggle } from "@/components/theme-toggle";
+import SidebarButton from "./sidebar-button";
+import MobileMenu from "./mobile-menu";
+import { Store } from "@prisma/client";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import Sidebar from "./sidebar";
 
-const Navbar = async () => {
-    const { userId } = auth();
 
-    if (!userId) {
-        redirect("/sign-in");
-    }
+interface NavbarProps {
+    stores: Store[]
+}
 
-    const stores = await prismadb.store.findMany({
-        where: {
-            userId,
-        },
-    });
+const Navbar = ({ stores }: NavbarProps) => {
+    const isDesktop = useMediaQuery("(min-width: 768px)");
 
-    return (
-        <div className="border-b">
-            <div className="flex h-16 items-center px-4">
-                <div>
-                    <StoreSwitcher items={stores}/>
-                </div>
-                <div>
-                    <MainNav className="mx-6"/>
-                </div>
-                <div className="ml-auto flex items-center space-x-4">
-                    <ThemeToggle />
-                    <UserButton afterSignOutUrl="/"/>
-                </div>
-            </div>
-        </div>
-    );
+    return isDesktop ? <Sidebar stores={stores}/> : <MobileMenu stores={stores}/>
+
 }
 
 export default Navbar;

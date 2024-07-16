@@ -30,8 +30,9 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({
             <div className="flex-1 space-y-4 p-8 pt-6">
                 <Heading title="Dashboard" description="Overview of your store"/>
                     <Separator/>
-                    <div className="grid gap-4 grid-cols-3">
-                    <Card>
+                    <div className="w-full flex-row flex flex-wrap gap-4">
+                    <div className="flex grow">
+                    <Card className="min-w-[200px] w-full">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
                                 Total Revenue
@@ -44,8 +45,9 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({
                             </div>
                         </CardContent>
                     </Card>
-
-                    <Card>
+                    </div>
+                    <div className="flex grow">
+                    <Card className="min-w-[200px] w-full">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
                                 Sales
@@ -58,8 +60,9 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({
                             </div>
                         </CardContent>
                     </Card>
-
-                    <Card>
+                    </div>
+                    <div className="flex grow">
+                    <Card className="min-w-[200px] w-full">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
                                 Products In Stock
@@ -72,6 +75,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({
                             </div>
                         </CardContent>
                     </Card>
+                    </div>
                     </div>
                     <Card className="col-span-4">
                         <CardHeader>
