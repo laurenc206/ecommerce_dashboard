@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { CellAction } from "./cell-action"
+import { Check } from "lucide-react"
 
 export type SubcategoryColumn = {
   id: string
@@ -21,6 +22,14 @@ export const columns: ColumnDef<SubcategoryColumn>[] = [
     header: "Category",
     cell: ({ row }) => row.original.categoryName,
   },
+  {
+    accessorKey: "isLocked",
+    header: "Locked",
+    cell: ({ row }) => 
+      <div className="flex items-center">
+        { row.getValue("isLocked") ? <Check /> : null}
+      </div>
+  }, 
   {
     accessorKey: "createdAt",
     header: "Date",

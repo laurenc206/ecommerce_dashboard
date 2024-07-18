@@ -42,7 +42,11 @@ export const CellAction: React.FC<CellActionProps> = ({
             router.refresh();
             toast.success("Product deleted.");    
         } catch (error) {
-            toast.error("Something went wrong.");
+            if (error instanceof Error && error.message.includes("409")) {
+                toast.error("Locked items can't be deleted.");
+            } else {
+                toast.error("Something went wrong.");
+            }
         } finally {
             setLoading(false);
             setOpen(false);

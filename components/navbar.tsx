@@ -22,5 +22,4 @@ const Navbar = ({ stores }: NavbarProps) => {
     return isDesktop ? <Sidebar stores={stores}/> : <MobileMenu stores={stores}/>
 
 }
-
 export default Navbar;

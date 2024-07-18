@@ -51,13 +51,23 @@ export async function DELETE (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
-        const color = await prismadb.color.delete({
+        const color = await prismadb.color.findFirst({
+            where: {
+                id: params.colorId
+            }
+        })
+
+        if (color?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
+        const res = await prismadb.color.delete({
             where: {
                 id: params.colorId,
             },    
         });
 
-        return NextResponse.json(color);
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[COLOR_DELETE]', error);
         return new NextResponse("Internal error", { status: 500 });
@@ -73,7 +83,7 @@ export async function PATCH (
 
         const body = await req.json();
 
-        const { name, value } = body;
+        const { name, value, isLocked } = body;
 
         if (!userId){
             return new NextResponse("Unauthenticated", { status: 403 });
@@ -102,17 +112,28 @@ export async function PATCH (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
-        const color = await prismadb.color.update({
+        const color = await prismadb.color.findFirst({
+            where: {
+                id: params.colorId
+            }
+        })
+
+        if (color?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
+        const res = await prismadb.color.update({
             where: {
                 id: params.colorId,
             },
             data: {
                 name,
-                value
+                value,
+                isLocked
             }
         });
 
-        return NextResponse.json(color);
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[COLOR_PATCH]', error);
         return new NextResponse("Internal error", { status: 500 });

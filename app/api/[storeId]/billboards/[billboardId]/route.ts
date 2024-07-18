@@ -51,13 +51,23 @@ export async function DELETE (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
-        const billboard = await prismadb.billboard.delete({
+        const billboard = await prismadb.billboard.findFirst({
+            where: {
+                id: params.billboardId
+            }
+        })
+
+        if (billboard?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
+        const res = await prismadb.billboard.delete({
             where: {
                 id: params.billboardId,
             },    
         });
 
-        return NextResponse.json(billboard);
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[BILLBOARD_DELETE]', error);
         return new NextResponse("Internal error", { status: 500 });
@@ -73,7 +83,7 @@ export async function PATCH (
 
         const body = await req.json();
 
-        const { label, imageUrl } = body;
+        const { label, imageUrl, isFeatured, isLocked } = body;
 
         if (!userId){
             return new NextResponse("Unauthenticated", { status: 403 });
@@ -102,17 +112,29 @@ export async function PATCH (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
-        const billboard = await prismadb.billboard.update({
+        const billboard = await prismadb.billboard.findFirst({
+            where: {
+                id: params.billboardId
+            }
+        })
+
+        if (billboard?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
+        const billboard_update = await prismadb.billboard.update({
             where: {
                 id: params.billboardId,
             },
             data: {
                 label,
-                imageUrl
+                imageUrl,
+                isFeatured,
+                isLocked
             }
         });
 
-        return NextResponse.json(billboard);
+        return NextResponse.json(billboard_update);
     } catch (error) {
         console.log('[BILLBOARD_PATCH]', error);
         return new NextResponse("Internal error", { status: 500 });

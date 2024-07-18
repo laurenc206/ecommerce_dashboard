@@ -42,7 +42,11 @@ export const CellAction: React.FC<CellActionProps> = ({
             router.refresh();
             toast.success("Color deleted.");
         } catch (error) {
-            toast.error("Make sure you removed all products using this color first.");
+            if (error instanceof Error && error.message.includes("409")) {
+                toast.error("Locked items can't be deleted.");
+            } else {
+                toast.error("Make sure you removed all products using this color first.");
+            } 
         } finally {
             setLoading(false);
             setOpen(false);

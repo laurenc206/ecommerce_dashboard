@@ -14,7 +14,7 @@ interface SidebarProps {
 const Sidebar = ({ stores }: SidebarProps) => {
 
   return (
-    <aside className="w-[270px] max-w-xs h-screen fixed left-0 top-0 z-40 border-r overflow-y-scroll no-scrollbar">
+    <aside className="w-[270px] max-w-xs h-screen fixed left-0 top-0 z-40 border-r overflow-y-auto">
         <div className="h-full px-5 py-6">
         
             <div className="flex flex-col justify-between h-full">

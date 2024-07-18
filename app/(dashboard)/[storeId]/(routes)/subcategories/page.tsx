@@ -26,7 +26,8 @@ const SubcategoriesPage = async ({
         id: item.id,
         name: item.name,
         categoryName: item.category.name,
-        createdAt: format(item.createdAt, "MMMM do, yyyy")
+        isLocked: item.isLocked,
+        createdAt: format(item.createdAt, "MMMM do, yyyy"),
     }));
 
     return (

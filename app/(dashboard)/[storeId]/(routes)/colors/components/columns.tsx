@@ -3,11 +3,13 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { CellAction } from "./cell-action"
+import { Check } from "lucide-react"
 
 export type ColorColumn = {
   id: string
   name: string
   value: string
+  isLocked: boolean
   createdAt: string
 }
 
@@ -28,6 +30,14 @@ export const columns: ColumnDef<ColorColumn>[] = [
         </div>
     )
   },
+  {
+    accessorKey: "isLocked",
+    header: "Locked",
+    cell: ({ row }) => 
+      <div className="flex items-center">
+        { row.getValue("isLocked") ? <Check /> : null}
+      </div>
+  }, 
   {
     accessorKey: "createdAt",
     header: "Date",

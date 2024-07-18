@@ -51,13 +51,24 @@ export async function DELETE (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
-        const subcategory = await prismadb.subcategory.deleteMany({
+        const subcategory = await prismadb.subcategory.findFirst({
+            where: {
+                id: params.subcategoryId
+            }
+        })
+
+        if (subcategory?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
+
+        const res = await prismadb.subcategory.deleteMany({
             where: {
                 id: params.subcategoryId,
             },    
         });
 
-        return NextResponse.json(subcategory);
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[SUBCATEGORY_DELETE]', error);
         return new NextResponse("Internal error", { status: 500 });
@@ -73,7 +84,7 @@ export async function PATCH (
 
         const body = await req.json();
 
-        const { name, categoryId } = body;
+        const { name, categoryId, isLocked } = body;
 
         if (!userId){
             return new NextResponse("Unauthenticated", { status: 403 });
@@ -102,17 +113,28 @@ export async function PATCH (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
-        const subcategory = await prismadb.subcategory.update({
+        const subcategory = await prismadb.subcategory.findFirst({
+            where: {
+                id: params.subcategoryId
+            }
+        })
+
+        if (subcategory?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
+        const res = await prismadb.subcategory.update({
             where: {
                 id: params.subcategoryId,
             },
             data: {
                 name,
-                categoryId
+                categoryId,
+                isLocked,
             }
         });
 
-        return NextResponse.json(subcategory);
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[SUBCATEGORY_PATCH]', error);
         return new NextResponse("Internal error", { status: 500 });

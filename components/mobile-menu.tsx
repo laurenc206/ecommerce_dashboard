@@ -34,7 +34,7 @@ const MobileMenu = ({ stores }: MobileMenuProps) => {
                     <DrawerContent>
                         <DrawerTitle></DrawerTitle>
                     <div className="h-screen w-80">
-                        <div className="flex flex-col justify-between py-4 px-2 overflow-y-scroll h-full no-scrollbar">
+                        <div className="flex flex-col justify-between py-4 px-2 h-full overflow-y-auto">
                             <DrawerClose asChild>
                                 <NavLinks className="flex flex-col w-full gap-4" />
                             </DrawerClose>

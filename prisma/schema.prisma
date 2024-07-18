@@ -22,6 +22,7 @@ model Store {
   colors     Color[]     @relation("StoreToColor")
   products   Product[]   @relation("StoreToProduct")
   orders     Order[]     @relation("StoreToOrder") 
+  isLocked   Boolean     @default(true)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
@@ -33,6 +34,8 @@ model Billboard {
   label     String
   imageUrl  String
   categories Category[]
+  isLocked   Boolean  @default(false)
+  isFeatured Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -48,6 +51,7 @@ model Category {
   products    Product[] @relation("CategoryToProduct")
   name        String
   subcategories Subcategory[] @relation("CategoryToSubcategory")
+  isLocked   Boolean  @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -63,6 +67,7 @@ model Subcategory {
   category Category @relation("CategoryToSubcategory", fields:[categoryId], references:[id])
   products Product[] @relation("SubcategoryToProduct")
   name String
+  isLocked   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -77,6 +82,7 @@ model Size {
   name      String
   value     String
   products  Product[]
+  isLocked   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -90,6 +96,7 @@ model Color {
   name      String
   value     String
   products  Product[]
+  isLocked   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -108,7 +115,7 @@ model Product {
   price      Decimal
   isFeatured Boolean  @default(false)
   isArchived Boolean  @default(false)
-  isLocked   Boolean  @default(true)
+  isLocked   Boolean  @default(false)
   sizeId     String?
   size       Size?     @relation(fields: [sizeId], references: [id])
   colorId    String?

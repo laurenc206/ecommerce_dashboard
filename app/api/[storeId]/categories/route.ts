@@ -11,7 +11,7 @@ export async function POST(
       const { userId } = auth();
       const body = await req.json();
 
-      const { name, billboardId } = body;
+      const { name, billboardId, isLocked } = body;
 
       if (!userId) {
         return new NextResponse("Unauthenticated", { status: 401 });
@@ -44,6 +44,7 @@ export async function POST(
         data: {
             name,
             billboardId,
+            isLocked,
             storeId: params.storeId
         }
       });
@@ -60,13 +61,17 @@ export async function GET(
     { params }: { params: { storeId: string } }
 ) {
     try {
+      const { searchParams } = new URL(req.url)
+      const isLocked = searchParams.get("isLocked")
+
       if (!params.storeId) {
         return new NextResponse("Store id is required", { status: 400 });
       }
 
       const categories = await prismadb.category.findMany({
         where: {
-            storeId: params.storeId
+            storeId: params.storeId,
+            isLocked: isLocked ? true : undefined
         }
       });
 

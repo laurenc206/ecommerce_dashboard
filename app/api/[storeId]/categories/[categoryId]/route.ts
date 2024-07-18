@@ -54,13 +54,23 @@ export async function DELETE (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
-        const category = await prismadb.category.delete({
+        const category = await prismadb.category.findFirst({
+            where: {
+                id: params.categoryId
+            }
+        })
+
+        if (category?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
+        const res = await prismadb.category.delete({
             where: {
                 id: params.categoryId,
             },    
         });
 
-        return NextResponse.json(category);
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[CATEGORY_DELETE]', error);
         return new NextResponse("Internal error", { status: 500 });
@@ -76,7 +86,7 @@ export async function PATCH (
 
         const body = await req.json();
 
-        const { name, billboardId } = body;
+        const { name, billboardId, isLocked } = body;
 
         if (!userId){
             return new NextResponse("Unauthenticated", { status: 403 });
@@ -105,17 +115,28 @@ export async function PATCH (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
-        const category = await prismadb.category.update({
+        const category = await prismadb.category.findFirst({
+            where: {
+                id: params.categoryId
+            }
+        })
+
+        if (category?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
+        const res = await prismadb.category.update({
             where: {
                 id: params.categoryId,
             },
             data: {
                 name,
-                billboardId
+                billboardId,
+                isLocked
             }
         });
 
-        return NextResponse.json(category);
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[CATEGORY_PATCH]', error);
         return new NextResponse("Internal error", { status: 500 });

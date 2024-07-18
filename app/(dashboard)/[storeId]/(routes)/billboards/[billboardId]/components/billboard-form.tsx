@@ -15,6 +15,7 @@ import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { Form, 
          FormControl, 
+         FormDescription, 
          FormField, 
          FormItem, 
          FormLabel, 
@@ -22,10 +23,13 @@ import { Form,
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
 import ImageUpload from "@/components/ui/image-upload";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const formSchema = z.object({
     label: z.string().min(1),
-    imageUrl: z.string().min(1)
+    imageUrl: z.string().min(1),
+    isFeatured: z.boolean().default(false).optional(),
+    isLocked: z.boolean().default(false).optional(),
 });
 
 type BillboardFormValues = z.infer<typeof formSchema>
@@ -52,7 +56,9 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
             label: '',
-            imageUrl: ''
+            imageUrl: '',
+            isFeatured: false,
+            isLocked: false,
         }
     });
 
@@ -67,8 +73,14 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             router.push(`/${params.storeId}/billboards`)
             router.refresh();
             toast.success(toastMessage);
-        } catch (error) {
-            toast.error("Something went wrong.");
+        } catch (error) {  
+            if (error instanceof Error && error.message.includes("409")) {
+                router.push(`/${params.storeId}/billboards`)
+                router.refresh();
+                toast.error("Locked items can't be modified.");
+            } else {
+                toast.error("Something went wrong.");
+            }
         } finally {
             setLoading(false);
         }
@@ -81,8 +93,14 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             router.push(`/${params.storeId}/billboards`);
             router.refresh();
             toast.success("Billboard deleted.");
-        } catch (error) {
-            toast.error("Make sure you removed all categories using this billboard first.");
+        } catch (error) {            
+            if (error instanceof Error && error.message.includes("409")) {
+                router.push(`/${params.storeId}/billboards`)
+                router.refresh();
+                toast.error("Locked items can't be deleted.");
+            } else {
+               toast.error("Make sure you removed all categories using this billboard first.");
+            }
         } finally {
             setLoading(false);
             setOpen(false);
@@ -146,6 +164,51 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                                         <Input disabled={loading} placeholder="Billboard label" {...field} />
                                     </FormControl>
                                     <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="isFeatured"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                    <FormControl>
+                                        <Checkbox 
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                        <FormLabel>
+                                            Featured
+                                        </FormLabel>
+                                        <FormDescription>
+                                            This billboard will appear on the home page
+                                        </FormDescription>
+                                    </div>
+                                </FormItem>
+                            )}
+                        />
+                    
+                    <FormField
+                            control={form.control}
+                            name="isLocked"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                    <FormControl>
+                                        <Checkbox 
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                        <FormLabel>
+                                            Locked
+                                        </FormLabel>
+                                        <FormDescription>
+                                            This billboard can't be modified
+                                        </FormDescription>
+                                    </div>
                                 </FormItem>
                             )}
                         />

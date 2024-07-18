@@ -51,13 +51,23 @@ export async function DELETE (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
-        const size = await prismadb.size.delete({
+        const size = await prismadb.size.findFirst({
+            where: {
+                id: params.sizeId
+            }
+        })
+
+        if (size?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
+        const res = await prismadb.size.delete({
             where: {
                 id: params.sizeId,
             },    
         });
 
-        return NextResponse.json(size);
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[SIZE_DELETE]', error);
         return new NextResponse("Internal error", { status: 500 });
@@ -73,7 +83,7 @@ export async function PATCH (
 
         const body = await req.json();
 
-        const { name, value } = body;
+        const { name, value, isLocked } = body;
 
         if (!userId){
             return new NextResponse("Unauthenticated", { status: 403 });
@@ -102,17 +112,28 @@ export async function PATCH (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
-        const size = await prismadb.size.update({
+        const size= await prismadb.size.findFirst({
+            where: {
+                id: params.sizeId
+            }
+        })
+
+        if (size?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
+        const res = await prismadb.size.update({
             where: {
                 id: params.sizeId,
             },
             data: {
                 name,
-                value
+                value,
+                isLocked,
             }
         });
 
-        return NextResponse.json(size);
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[SIZE_PATCH]', error);
         return new NextResponse("Internal error", { status: 500 });

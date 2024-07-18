@@ -64,7 +64,7 @@ export async function DELETE (
         });
 
         if (product?.isLocked) {
-            return new NextResponse("Unauthorized", { status: 401 })
+            return new NextResponse("Conflict", { status: 409 })
         }
 
         const res = await prismadb.product.delete({
@@ -144,6 +144,16 @@ export async function PATCH (
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
+        const product = await prismadb.product.findFirst({
+            where: {
+                id: params.productId
+            }
+        })
+
+        if (product?.isLocked) {
+            return new NextResponse("Conflict", { status: 409 })
+        }
+
         await prismadb.product.update({
             where: {
                 id: params.productId,
@@ -160,11 +170,12 @@ export async function PATCH (
                 },
                 isFeatured,
                 isArchived,
+                isLocked,
                 description
             }
         });
 
-        const product = await prismadb.product.update({
+        const res = await prismadb.product.update({
             where: {
                 id: params.productId
             },
@@ -180,7 +191,7 @@ export async function PATCH (
 
         })
 
-        return NextResponse.json(product);
+        return NextResponse.json(res);
     } catch (error) {
         console.log('[PRODUCT_PATCH]', error);
         return new NextResponse("Internal error", { status: 500 });

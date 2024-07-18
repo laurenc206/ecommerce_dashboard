@@ -26,6 +26,7 @@ const CategoriesPage = async ({
         id: item.id,
         name: item.name,
         billboardLabel: item.billboard.label,
+        isLocked: item.isLocked,
         createdAt: format(item.createdAt, "MMMM do, yyyy")
     }));
 

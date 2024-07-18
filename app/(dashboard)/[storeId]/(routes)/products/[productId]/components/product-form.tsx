@@ -44,7 +44,7 @@ const formSchema = z.object({
     description: z.string().optional(),
     isFeatured: z.boolean().default(false).optional(),
     isArchived: z.boolean().default(false).optional(),
-    isLocked: z.boolean().default(true)
+    isLocked: z.boolean().default(false).optional()
 });
 
 type ProductFormValues = z.infer<typeof formSchema>
@@ -89,6 +89,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         description: '',
         isFeatured: false,
         isArchived: false,
+        isLocked: false,
       }
 
     const form = useForm<ProductFormValues>({
@@ -112,7 +113,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             router.refresh();
             toast.success(toastMessage);
         } catch (error) {
-            toast.error("Something went wrong.");
+            if (error instanceof Error && error.message.includes("409")) {
+                router.push(`/${params.storeId}/products`)
+                router.refresh();
+                toast.error("Locked items can't be modified.");
+            } else {
+                toast.error("Something went wrong.");
+            }
         } finally {
             setLoading(false);
         }
@@ -126,7 +133,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             router.refresh();
             toast.success("Product deleted.");
         } catch (error) {
-            toast.error("Something went wrong.");
+            if (error instanceof Error && error.message.includes("409")) {
+                router.push(`/${params.storeId}/products`)
+                router.refresh();
+                toast.error("Locked items can't be modified.");
+            } else {
+                toast.error("Something went wrong.");
+            }
         } finally {
             setLoading(false);
             setOpen(false);
@@ -419,6 +432,29 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                         </FormLabel>
                                         <FormDescription>
                                             This product will not appear anywhere in the store
+                                        </FormDescription>
+                                    </div>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="isLocked"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                    <FormControl>
+                                        <Checkbox 
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                        <FormLabel>
+                                            Locked
+                                        </FormLabel>
+                                        <FormDescription>
+                                            This product can't be modified
                                         </FormDescription>
                                     </div>
                                 </FormItem>

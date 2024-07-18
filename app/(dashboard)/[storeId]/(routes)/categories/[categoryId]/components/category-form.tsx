@@ -15,6 +15,7 @@ import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { Form, 
          FormControl, 
+         FormDescription, 
          FormField, 
          FormItem, 
          FormLabel, 
@@ -28,10 +29,12 @@ import { Select,
          SelectContent, 
          SelectItem
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const formSchema = z.object({
     name: z.string().min(1),
-    billboardId: z.string().min(1)
+    billboardId: z.string().min(1),
+    isLocked: z.boolean().default(false).optional()
 });
 
 type CategoryFormValues = z.infer<typeof formSchema>
@@ -60,7 +63,8 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
             name: '',
-            billboardId: ''
+            billboardId: '',
+            isLocked: false,
         }
     });
 
@@ -76,7 +80,13 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             router.refresh();
             toast.success(toastMessage);
         } catch (error) {
-            toast.error("Something went wrong.");
+            if (error instanceof Error && error.message.includes("409")) {
+                router.push(`/${params.storeId}/categories`)
+                router.refresh();
+                toast.error("Locked items can't be modified.");
+            } else {
+                toast.error("Something went wrong.");
+            }
         } finally {
             setLoading(false);
         }
@@ -90,7 +100,13 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             router.refresh();
             toast.success("Category deleted.");
         } catch (error) {
-            toast.error("Make sure you removed all subcategories using this category first.");
+            if (error instanceof Error && error.message.includes("409")) {
+                router.push(`/${params.storeId}/categories`)
+                router.refresh();
+                toast.error("Locked items can't be deleted.");
+            } else {
+               toast.error("Make sure you removed all subcategories using this category first.");
+            }
         } finally {
             setLoading(false);
             setOpen(false);
@@ -171,6 +187,28 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                                         </SelectContent>
                                     </Select>
                                     <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="isLocked"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                    <FormControl>
+                                        <Checkbox 
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                        <FormLabel>
+                                            Locked
+                                        </FormLabel>
+                                        <FormDescription>
+                                            This cateogry can't be modified
+                                        </FormDescription>
+                                    </div>
                                 </FormItem>
                             )}
                         />

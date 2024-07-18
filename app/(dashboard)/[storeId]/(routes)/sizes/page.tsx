@@ -23,6 +23,7 @@ const SizesPage = async ({
         id: item.id,
         name: item.name,
         value: item.value,
+        isLocked: item.isLocked,
         createdAt: format(item.createdAt, "MMMM do, yyyy")
     }));
 

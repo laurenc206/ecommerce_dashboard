@@ -29,7 +29,7 @@ interface SettingsFormProps {
 }
 
 const formSchema = z.object({
-    name: z.string().min(1)
+    name: z.string().min(1),
 });
 
 type SettingsFormValues = z.infer<typeof formSchema>
@@ -57,7 +57,6 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
             toast.success("Store updated.");
         } catch (error) {
             toast.error("Something went wrong.");
-
         } finally {
             setLoading(false);
         }

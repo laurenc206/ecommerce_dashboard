@@ -15,18 +15,21 @@ import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { Form, 
          FormControl, 
+         FormDescription, 
          FormField, 
          FormItem, 
          FormLabel, 
          FormMessage} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const formSchema = z.object({
     name: z.string().min(1),
     value: z.string().min(4).regex(/^#/, {
         message: 'String must be a valid hex code',
     }),
+    isLocked: z.boolean().default(false).optional()
 });
 
 type ColorFormValues = z.infer<typeof formSchema>
@@ -53,7 +56,8 @@ export const ColorForm: React.FC<ColorFormProps> = ({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
             name: '',
-            value: ''
+            value: '',
+            isLocked: false
         }
     });
 
@@ -69,7 +73,13 @@ export const ColorForm: React.FC<ColorFormProps> = ({
             router.refresh();
             toast.success(toastMessage);
         } catch (error) {
-            toast.error("Something went wrong.");
+            if (error instanceof Error && error.message.includes("409")) {
+                router.push(`/${params.storeId}/colors`)
+                router.refresh();
+                toast.error("Locked items can't be modified.");
+            } else {
+                toast.error("Something went wrong.");
+            }
         } finally {
             setLoading(false);
         }
@@ -83,7 +93,13 @@ export const ColorForm: React.FC<ColorFormProps> = ({
             router.refresh();
             toast.success("Color deleted.");
         } catch (error) {
-            toast.error("Make sure you removed all products using this color first.");
+            if (error instanceof Error && error.message.includes("409")) {
+                router.push(`/${params.storeId}/colors`)
+                router.refresh();
+                toast.error("Locked items can't be deleted.");
+            } else {
+                toast.error("Make sure you removed all products using this color first.");
+            }
         } finally {
             setLoading(false);
             setOpen(false);
@@ -145,6 +161,28 @@ export const ColorForm: React.FC<ColorFormProps> = ({
                                         </div>
                                     </FormControl>
                                     <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="isLocked"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                    <FormControl>
+                                        <Checkbox 
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                        <FormLabel>
+                                            Locked
+                                        </FormLabel>
+                                        <FormDescription>
+                                            This color can't be modified
+                                        </FormDescription>
+                                    </div>
                                 </FormItem>
                             )}
                         />

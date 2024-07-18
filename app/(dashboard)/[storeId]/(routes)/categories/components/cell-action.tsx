@@ -42,11 +42,14 @@ export const CellAction: React.FC<CellActionProps> = ({
             router.refresh();
             toast.success("Category deleted.");
         } catch (error) {
-            toast.error("Make sure you removed all subcategories using this category first.");
+            if (error instanceof Error && error.message.includes("409")) {
+                toast.error("Locked items can't be deleted.");
+            } else {
+               toast.error("Make sure you removed all subcategories using this category first.");
+            }
         } finally {
             setLoading(false);
             setOpen(false);
-            console.log("loading " + loading + " open " + open)
         }
     };
 
