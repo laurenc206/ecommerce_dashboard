@@ -46,6 +46,7 @@ export const CellAction: React.FC<CellActionProps> = ({
         } finally {
             setLoading(false);
             setOpen(false);
+            console.log("loading " + loading + " open " + open)
         }
     };
 
