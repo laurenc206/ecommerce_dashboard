@@ -58,7 +58,7 @@ export async function DELETE (
         })
 
         if (billboard?.isLocked) {
-            //return new NextResponse("Conflict", { status: 409 })
+            return new NextResponse("Conflict", { status: 409 })
         }
 
         const res = await prismadb.billboard.delete({
@@ -119,7 +119,7 @@ export async function PATCH (
         })
 
         if (billboard?.isLocked) {
-            //return new NextResponse("Conflict", { status: 409 })
+            return new NextResponse("Conflict", { status: 409 })
         }
 
         const billboard_update = await prismadb.billboard.update({

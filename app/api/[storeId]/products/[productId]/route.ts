@@ -151,7 +151,7 @@ export async function PATCH (
         })
 
         if (product?.isLocked) {
-            //return new NextResponse("Conflict", { status: 409 })
+            return new NextResponse("Conflict", { status: 409 })
         }
 
         await prismadb.product.update({

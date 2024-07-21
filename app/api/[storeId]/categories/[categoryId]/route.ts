@@ -122,7 +122,7 @@ export async function PATCH (
         })
 
         if (category?.isLocked) {
-         //   return new NextResponse("Conflict", { status: 409 })
+            return new NextResponse("Conflict", { status: 409 })
         }
 
         const res = await prismadb.category.update({
