@@ -62,7 +62,7 @@ export async function GET(
 ) {
     try {
       const { searchParams } = new URL(req.url)
-      const isLocked = searchParams.get("isLocked")
+      const categoryId = searchParams.get("categoryId");
 
       if (!params.storeId) {
         return new NextResponse("Store id is required", { status: 400 });
@@ -71,7 +71,7 @@ export async function GET(
       const subcategories = await prismadb.subcategory.findMany({
         where: {
             storeId: params.storeId,
-            isLocked: isLocked ? true : undefined,
+            categoryId: categoryId ? categoryId : undefined 
         }
       });
 

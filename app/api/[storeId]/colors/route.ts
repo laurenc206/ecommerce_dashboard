@@ -62,7 +62,6 @@ export async function GET(
 ) {
     try {
       const { searchParams } = new URL(req.url)
-      const isLocked = searchParams.get("isLocked")
 
       if (!params.storeId) {
         return new NextResponse("Store id is required", { status: 400 });
@@ -71,7 +70,6 @@ export async function GET(
       const colors = await prismadb.color.findMany({
         where: {
             storeId: params.storeId,
-            isLocked: isLocked ? true : undefined
         }
       });
 

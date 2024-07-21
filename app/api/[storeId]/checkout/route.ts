@@ -77,6 +77,8 @@ export async function POST(
         },
     });
 
+    console.log(session)
+
     return NextResponse.json({ url: session.url }, {
         headers: corsHeaders
     });

@@ -64,7 +64,6 @@ export async function GET(
     try {
       const { searchParams } = new URL(req.url)
       const isFeatured = searchParams.get("isFeatured")
-      const isLocked = searchParams.get("isLocked")
 
       if (!params.storeId) {
         return new NextResponse("Store id is required", { status: 400 });
@@ -74,7 +73,6 @@ export async function GET(
         where: {
             storeId: params.storeId,
             isFeatured: isFeatured ? true : undefined,
-            isLocked: isLocked ? true : undefined,
         }
       });
 

@@ -62,18 +62,32 @@ export async function GET(
 ) {
     try {
       const { searchParams } = new URL(req.url)
-      const isLocked = searchParams.get("isLocked")
 
       if (!params.storeId) {
         return new NextResponse("Store id is required", { status: 400 });
       }
 
+      if (searchParams.get("sortBy") === "asc") {
+        const categories = await prismadb.category.findMany({
+          where: {
+              storeId: params.storeId,
+          }, 
+          orderBy: {
+            createdAt: 'asc'
+          }
+        });
+        return NextResponse.json(categories);
+      }
+      
       const categories = await prismadb.category.findMany({
         where: {
             storeId: params.storeId,
-            isLocked: isLocked ? true : undefined
+        }, 
+        orderBy: {
+          createdAt: 'desc'
         }
       });
+      
 
       return NextResponse.json(categories);
     } catch (error) {

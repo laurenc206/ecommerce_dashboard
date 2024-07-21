@@ -6,7 +6,6 @@ import StoreSwitcher from './store-switcher'
 import { NavLinks } from './nav-links'
 import { UserButton } from '@clerk/nextjs'
 import { ThemeToggle } from './theme-toggle'
-import Sidebar from './sidebar'
 
 interface MobileMenuProps {
     stores: Store[]
