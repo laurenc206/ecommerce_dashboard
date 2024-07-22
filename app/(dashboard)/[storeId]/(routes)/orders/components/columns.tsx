@@ -1,6 +1,8 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
+import { ArrowUpDown } from "lucide-react"
 
 export type OrderColumn = {
   id: string
@@ -35,7 +37,19 @@ export const columns: ColumnDef<OrderColumn>[] = [
   },
   {
     accessorKey: "totalPrice",
-    header: "Total Price",
+    header: ({ column }) => {
+      return (
+        <div className="-ml-4 line-clamp-1 min-w-[130px]">
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Total Price
+          <ArrowUpDown className="w-4 h-4 ml-2"/>
+        </Button>
+        </div>
+      )
+    },
   },
   {
     accessorKey: "isPaid",

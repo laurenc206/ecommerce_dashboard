@@ -3,7 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { CellAction } from "./cell-action"
-import { Check } from "lucide-react"
+import { ArrowUpDown, Check } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export type BillboardColumn = {
   id: string
@@ -16,7 +17,19 @@ export type BillboardColumn = {
 export const columns: ColumnDef<BillboardColumn>[] = [
   {
     accessorKey: "label",
-    header: "Label",
+    header: ({ column }) => {
+      return (
+        <div className="-ml-4">
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Label
+          <ArrowUpDown className="w-4 h-4 ml-2"/>
+        </Button>
+        </div>
+      )
+    },
     cell: ({ row }) => 
       <div className="line-clamp-1 w-max pr-5">
         {row.getValue("label")}
@@ -40,7 +53,19 @@ export const columns: ColumnDef<BillboardColumn>[] = [
   }, 
   {
     accessorKey: "createdAt",
-    header: "Date",
+    header: ({ column }) => {
+      return (
+        <div className="-ml-4">
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date
+          <ArrowUpDown className="w-4 h-4 ml-2"/>
+        </Button>
+        </div>
+      )
+    },
     cell: ({ row }) => 
       <div className="line-clamp-1 w-max">
         {row.getValue("createdAt")}
