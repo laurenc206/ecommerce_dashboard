@@ -44,12 +44,21 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+
     state: {
         columnFilters,
+        
     },
+    initialState: {
+        pagination: {
+            pageSize:8
+        }
+    }
   })
 
+ 
   return (
+
     <div>
         <div className="flex items-center py-4">
             <Input

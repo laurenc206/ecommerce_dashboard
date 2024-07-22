@@ -2,8 +2,6 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import prismadb from "@/lib/prismadb";
-import Navbar from "@/components/navbar";
-import Sidebar from "@/components/sidebar";
 import MainNav from "@/components/main-nav";
 
 export default async function DashboardLayout({
@@ -32,8 +30,8 @@ export default async function DashboardLayout({
 
     return (
         <>
-        <MainNav />
-        <main className="md:ml-[300px] mt-2">
+        <MainNav storeId={params.storeId}/>
+        <main className="md:ml-[270px]  lg:ml-[300px] mt-2">
             {children}
         </main>
         </>

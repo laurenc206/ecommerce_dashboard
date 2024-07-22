@@ -17,13 +17,19 @@ export const columns: ColumnDef<ColorColumn>[] = [
   {
     accessorKey: "name",
     header: "Name",
+    cell: ({ row }) => 
+      <div className="line-clamp-1 w-max pr-5">
+        {row.getValue("name")}
+      </div>
   },  
   {
     accessorKey: "value",
     header: "Value",
     cell: ({ row }) => (
-      <div className="flex items-center gap-x-2">
+      <div className="flex flex-row items-center gap-x-2 pr-5 w-max">
+          <div className="uppercase">
           {row.original.value}
+          </div>
           <div className="h-6 w-6 rounded-full border"
                style={{ backgroundColor: row.original.value }} 
           />
@@ -34,16 +40,23 @@ export const columns: ColumnDef<ColorColumn>[] = [
     accessorKey: "isLocked",
     header: "Locked",
     cell: ({ row }) => 
-      <div className="flex items-center">
-        { row.getValue("isLocked") ? <Check /> : null}
+      <div className="flex items-center min-w-[60px]">
+        { row.getValue("isLocked") ? <Check className="w-4 sm:w-5"/> : null}
       </div>
   }, 
   {
     accessorKey: "createdAt",
     header: "Date",
+    cell: ({ row }) => 
+      <div className="line-clamp-1 w-max">
+        {row.getValue("createdAt")}
+      </div>
   },
   {
     id: "actions",
-    cell: ({ row }) => <CellAction data={row.original}/>
+    cell: ({ row }) => 
+      <div className="flex items-center min-w-[40px] justify-center">
+        <CellAction data={row.original}/>
+      </div>
   }
 ]

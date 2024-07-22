@@ -139,16 +139,16 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             </div>
             <Separator />
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-                    <div className="md:grid md:grid-cols-3 gap-8">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+                    <div className="gap-y-6 gap-x-6 flex w-full flex-wrap">
                         <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Category name" {...field} />
+                                        <Input className="w-full max-w-[400px]" disabled={loading} placeholder="Category name" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -158,7 +158,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                             control={form.control}
                             name="billboardId"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Billboard</FormLabel>
                                     <Select 
                                         disabled={loading} 
@@ -192,9 +192,9 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                         />
                         <FormField
                             control={form.control}
-                            name="isLocked"
+                            name="isLocked"      
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 max-w-[400px] w-full">
                                     <FormControl>
                                         <Checkbox 
                                             checked={field.value}
@@ -205,7 +205,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                                         <FormLabel>
                                             Locked
                                         </FormLabel>
-                                        <FormDescription>
+                                        <FormDescription className="text-xs sm:text-sm pt-2">
                                             This cateogry can't be modified
                                         </FormDescription>
                                     </div>

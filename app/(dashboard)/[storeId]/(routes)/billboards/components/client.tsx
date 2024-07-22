@@ -11,6 +11,7 @@ import { ApiList } from "@/components/ui/api-list";
 
 import { BillboardColumn, columns } from "./columns";
 
+
 interface BillboardClientProps {
     data: BillboardColumn[]
 }
@@ -23,7 +24,7 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
     
     return (
         <>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-y-4 gap-x-3">
                 <Heading 
                     title={`Billboards (${data.length})`}
                     description="Manage billboards for your store"

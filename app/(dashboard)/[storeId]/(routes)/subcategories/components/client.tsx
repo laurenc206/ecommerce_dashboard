@@ -23,7 +23,7 @@ export const SubcategoryClient: React.FC<SubcategoryClientProps> = ({
     
     return (
         <>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-y-4">
                 <Heading 
                     title={`Subcategories (${data.length})`}
                     description="Manage subcategories for your store"

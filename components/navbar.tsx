@@ -13,13 +13,14 @@ import Sidebar from "./sidebar";
 
 
 interface NavbarProps {
-    stores: Store[]
+    stores: Store[],
+    storeId: string,
 }
 
-const Navbar = ({ stores }: NavbarProps) => {
+const Navbar = ({ stores, storeId }: NavbarProps) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
-    return isDesktop ? <Sidebar stores={stores}/> : <MobileMenu stores={stores}/>
+    return isDesktop ? <Sidebar stores={stores}/> : <MobileMenu stores={stores} storeId={storeId}/>
 
 }
 export default Navbar;

@@ -132,16 +132,16 @@ export const ColorForm: React.FC<ColorFormProps> = ({
             </div>
             <Separator />
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">       
-                    <div className="md:grid md:grid-cols-3 gap-8">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">       
+                    <div className="gap-y-6 gap-x-6 flex w-full flex-wrap">
                         <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Color name" {...field} />
+                                        <Input className="w-full max-w-[400px]" disabled={loading} placeholder="Color name" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -151,7 +151,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({
                             control={form.control}
                             name="value"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Value</FormLabel>
                                     <FormControl>
                                         <div className="flex items-center gap-x-4">
@@ -168,7 +168,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({
                             control={form.control}
                             name="isLocked"
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 max-w-[400px] w-full">
                                     <FormControl>
                                         <Checkbox 
                                             checked={field.value}
@@ -179,7 +179,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({
                                         <FormLabel>
                                             Locked
                                         </FormLabel>
-                                        <FormDescription>
+                                        <FormDescription className="text-xs sm:text-sm pt-2">
                                             This color can't be modified
                                         </FormDescription>
                                     </div>

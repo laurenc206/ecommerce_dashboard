@@ -133,7 +133,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             </div>
             <Separator />
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
                     <FormField
                         control={form.control}
                         name="imageUrl"
@@ -153,25 +153,26 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                             )}
                     />
                     
-                    <div className="md:grid md:grid-cols-3 gap-8">
+                    <div className="space-y-6 gap-x-6 flex w-full flex-wrap">
                         <FormField
                             control={form.control}
                             name="label"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Label</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Billboard label" {...field} />
+                                        <Input className="w-full max-w-400" disabled={loading} placeholder="Billboard label" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
                             )}
                         />
+                        <div className="flex flex-row w-full gap-x-4 flex-wrap gap-y-6">
                         <FormField
                             control={form.control}
                             name="isFeatured"
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 max-w-[400px] w-full">
                                     <FormControl>
                                         <Checkbox 
                                             checked={field.value}
@@ -182,7 +183,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                                         <FormLabel>
                                             Featured
                                         </FormLabel>
-                                        <FormDescription>
+                                        <FormDescription className="text-xs sm:text-sm pt-2">
                                             This billboard will appear on the home page
                                         </FormDescription>
                                     </div>
@@ -194,7 +195,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                             control={form.control}
                             name="isLocked"
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 max-w-[400px] w-full">
                                     <FormControl>
                                         <Checkbox 
                                             checked={field.value}
@@ -205,7 +206,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                                         <FormLabel>
                                             Locked
                                         </FormLabel>
-                                        <FormDescription>
+                                        <FormDescription className="text-xs sm:text-sm pt-2">
                                             This billboard can't be modified
                                         </FormDescription>
                                     </div>
@@ -213,7 +214,9 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                             )}
                         />
                     </div>
-                    <Button disabled={loading} className="ml-auto" type="submit">
+                    </div>
+                    
+                    <Button disabled={loading} className="ml-auto " type="submit">
                         {action}
                     </Button>
                 </form>

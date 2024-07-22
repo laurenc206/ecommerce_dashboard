@@ -16,6 +16,10 @@ export const columns: ColumnDef<OrderColumn>[] = [
   {
     accessorKey: "products",
     header: "Products",
+    cell: ({ row }) => 
+    <div className="flex items-center min-w-[150px]">
+      {row.getValue("products")}
+    </div>
   },
   {
     accessorKey: "phone",
@@ -24,6 +28,10 @@ export const columns: ColumnDef<OrderColumn>[] = [
   {
     accessorKey: "address",
     header: "Address",
+    cell: ({ row }) => 
+      <div className="flex items-center min-w-[150px]">
+        {row.getValue("address")}
+      </div>
   },
   {
     accessorKey: "totalPrice",

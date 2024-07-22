@@ -14,10 +14,10 @@ interface SidebarProps {
 const Sidebar = ({ stores }: SidebarProps) => {
 
   return (
-    <aside className="w-[270px] max-w-xs h-screen fixed left-0 top-0 z-40 border-r overflow-y-auto">
+    <aside className=" w-[240px] lg:w-[270px] max-w-xs h-screen fixed left-0 top-0 z-40 border-r overflow-y-auto">
         <div className="h-full px-5 py-6">
         
-            <div className="flex flex-col justify-between h-full">
+            <div className="flex flex-col h-full lg:justify-between">
                  <div className="flex flex-col gap-4">
                 <div>
                     <img src="/logo.svg" alt="/logo.svg" className="h-[50px]"/>
@@ -28,8 +28,8 @@ const Sidebar = ({ stores }: SidebarProps) => {
                 <NavLinks className="flex flex-col w-full"/>
                 </div>
                 
-                <div className="w-full flex">
-                    <div className="py-1 px-3">
+                <div className="w-full flex pt-5 ">
+                    <div className="py-1 px-4">
                     <UserButton afterSignOutUrl="/" appearance={{
                         elements: {
                             userButtonAvatarBox: "h-[30px] w-[30px]"

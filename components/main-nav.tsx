@@ -3,8 +3,10 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import Navbar from "./navbar";
 
-
-const MainNav = async () => {
+interface MainNavProps {
+  storeId: string
+}
+const MainNav = async ({storeId}: MainNavProps) => {
     const { userId } = auth();
 
     if (!userId) {
@@ -17,7 +19,7 @@ const MainNav = async () => {
         },
     });
   return (
-    <Navbar stores={stores}/>
+    <Navbar stores={stores} storeId={storeId}/>
   )
 }
 

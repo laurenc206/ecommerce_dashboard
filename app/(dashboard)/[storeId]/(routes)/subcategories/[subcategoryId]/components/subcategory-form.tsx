@@ -133,18 +133,16 @@ export const SubcategoryForm: React.FC<SubcategoryFormProps> = ({
             </div>
             <Separator />
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-
-                    
-                    <div className="md:grid md:grid-cols-3 gap-8">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">                
+                <div className="gap-y-6 gap-x-6 flex w-full flex-wrap">
                         <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Subcategory name" {...field} />
+                                        <Input className="w-full max-w-[400px]" disabled={loading} placeholder="Subcategory name" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -154,7 +152,7 @@ export const SubcategoryForm: React.FC<SubcategoryFormProps> = ({
                             control={form.control}
                             name="categoryId"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Category</FormLabel>
                                         <Select
                                             disabled={loading}
@@ -190,7 +188,7 @@ export const SubcategoryForm: React.FC<SubcategoryFormProps> = ({
                             control={form.control}
                             name="isLocked"
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 max-w-[400px] w-full">
                                     <FormControl>
                                         <Checkbox 
                                             checked={field.value}
@@ -201,7 +199,7 @@ export const SubcategoryForm: React.FC<SubcategoryFormProps> = ({
                                         <FormLabel>
                                             Locked
                                         </FormLabel>
-                                        <FormDescription>
+                                        <FormDescription className="text-xs sm:text-sm pt-2">
                                             This subcategory can't be modified
                                         </FormDescription>
                                     </div>

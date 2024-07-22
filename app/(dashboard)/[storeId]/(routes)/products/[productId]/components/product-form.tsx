@@ -172,7 +172,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             </div>
             <Separator />
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
                     <FormField
                         control={form.control}
                         name="images"
@@ -194,15 +194,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             )}
                     />
                     
-                    <div className="md:grid md:grid-cols-3 gap-8">
+                    <div className="gap-y-6 gap-x-6 flex w-full flex-wrap">
                         <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Product name" {...field} />
+                                        <Input  className="w-full max-w-[400px]" disabled={loading} placeholder="Product name" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -212,10 +212,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             control={form.control}
                             name="price"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Price</FormLabel>
                                     <FormControl>
-                                        <Input type="number" disabled={loading} placeholder="0.00" {...field} />
+                                        <Input className="w-full max-w-[400px]" type="number" disabled={loading} placeholder="0.00" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -225,10 +225,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             control={form.control}
                             name="description"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative w-full">
                                     <FormLabel>Description</FormLabel>
                                     <FormControl>
-                                        <Textarea disabled={loading} rows={3} placeholder="Write description here" {...field} />
+                                        <Textarea className="w-full max-w-[400px]" disabled={loading} rows={3} placeholder="Write description here" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -238,9 +238,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             control={form.control}
                             name="categoryId"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative w-full max-w-[400px]">
                                     <FormLabel>Category</FormLabel>
+                                    <div className="max-w-[400px] w-full">
                                     <Select 
+                                        
                                         disabled={loading} 
                                         onValueChange={(e) => {
                                             form.setValue("categoryId", e)
@@ -271,6 +273,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                             ))}
                                         </SelectContent>
                                     </Select>
+                                    </div>
                                     <FormMessage/>
                                 </FormItem>
                             )}
@@ -280,8 +283,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             control={form.control}
                             name="subcategoryId"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative w-full max-w-[400px]">
                                     <FormLabel>Subcategory</FormLabel>
+                                    <div className="max-w-[400px] w-full">
                                     <Select 
                                         disabled={loading || (watchCategories === '') } 
                                         onValueChange={field.onChange} 
@@ -307,6 +311,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                             )}
                                         </SelectContent>
                                     </Select>
+                                    </div>
                                     <FormMessage/>
                                 </FormItem>
                             )}
@@ -316,7 +321,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             control={form.control}
                             name="sizeId"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Size</FormLabel>
                                     <Select 
                                         disabled={loading} 
@@ -356,7 +361,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             control={form.control}
                             name="colorId"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="relative max-w-[400px] w-full">
                                     <FormLabel>Color</FormLabel>
                                     <Select 
                                         disabled={loading} 
@@ -391,12 +396,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                 </FormItem>
                             )}
                         />
-
+                        <div className="flex w-full flex-wrap gap-y-6 gap-x-6">
                         <FormField
                             control={form.control}
                             name="isFeatured"
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 max-w-[400px] w-full">
                                     <FormControl>
                                         <Checkbox 
                                             checked={field.value}
@@ -407,7 +412,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                         <FormLabel>
                                             Featured
                                         </FormLabel>
-                                        <FormDescription>
+                                        <FormDescription className="text-xs sm:text-sm pt-2">
                                             This product will appear on the home page
                                         </FormDescription>
                                     </div>
@@ -419,7 +424,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             control={form.control}
                             name="isArchived"
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 max-w-[400px] w-full">
                                     <FormControl>
                                         <Checkbox 
                                             checked={field.value}
@@ -430,7 +435,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                         <FormLabel>
                                             Archived
                                         </FormLabel>
-                                        <FormDescription>
+                                        <FormDescription className="text-xs sm:text-sm pt-2">
                                             This product will not appear anywhere in the store
                                         </FormDescription>
                                     </div>
@@ -442,7 +447,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             control={form.control}
                             name="isLocked"
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 max-w-[400px] w-full">
                                     <FormControl>
                                         <Checkbox 
                                             checked={field.value}
@@ -453,13 +458,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                         <FormLabel>
                                             Locked
                                         </FormLabel>
-                                        <FormDescription>
+                                        <FormDescription className="text-xs sm:text-sm pt-2">
                                             This product can't be modified
                                         </FormDescription>
                                     </div>
                                 </FormItem>
                             )}
                         />
+                    </div>
                     </div>
                     <Button disabled={loading} className="ml-auto" type="submit">
                         {action}
