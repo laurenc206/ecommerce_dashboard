@@ -24,7 +24,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => 
-      <div className="line-clamp-1 min-w-[200px] w-full break-all text-ellipsis pr-5">
+      <div className="line-clamp-1 min-w-[200px] md:min-w-[300px] lg:min-w-[400px] w-full break-all text-ellipsis pr-5">
         {row.getValue("name")}
       </div>
   },
