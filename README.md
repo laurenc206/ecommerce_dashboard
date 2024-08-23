@@ -13,7 +13,7 @@ The schema to the tables is stored in prisma/schema.prisma. Any modifications to
 
 Currently, the dashboard has no inventory management but I plan on adding this in future versions. I also plan on allowing multiple color and sizing options for a product and enabling store user accounts.
 
-Reach out to me at laurencavdev.com!
+Reach out to me at laurencav.info!
 
 ## Set up 
 
