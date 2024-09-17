@@ -7,6 +7,8 @@ import { NavLinks } from './nav-links'
 import { UserButton } from '@clerk/nextjs'
 import { ThemeToggle } from './theme-toggle'
 import Link from 'next/link'
+import { SignOutButton } from '@clerk/nextjs'
+import { Button } from "@/components/ui/button"
 
 interface MobileMenuProps {
     stores: Store[],
@@ -43,13 +45,14 @@ const MobileMenu = ({ stores, storeId }: MobileMenuProps) => {
                             </DrawerClose>
                             
                 
-                                <div className="w-full flex pt-8 gap-2">
+                                <div className="w-full flex pt-8 gap-2 items-center">
                                     <div className="py-1 px-3">
-                                        <UserButton afterSignOutUrl="/" appearance={{
-                                            elements: {
-                                            userButtonAvatarBox: "h-[30px] w-[30px]"
-                                        }
-                                    }}/>
+                                    
+                                        <SignOutButton>
+                                            <Button variant="ghost" className="px-6 border border-white/[0.2]">
+                                                Sign-Out
+                                            </Button>
+                                        </SignOutButton>
                                     </div>
                     
                                     <ThemeToggle />
