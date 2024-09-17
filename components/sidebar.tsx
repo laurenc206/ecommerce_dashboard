@@ -32,7 +32,7 @@ const Sidebar = ({ stores }: SidebarProps) => {
                 <div className="w-full flex pt-5 items-center">
                     <div className="py-1 px-4">
                         <SignOutButton>
-                            <Button variant="ghost" className="py-1 px-6 border border-white/[0.2]">
+                            <Button variant="outline" className="py-1 px-6 border border-white/[0.2]">
                                 Sign-Out
                             </Button>
                         </SignOutButton>

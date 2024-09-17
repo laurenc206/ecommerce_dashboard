@@ -49,7 +49,7 @@ const MobileMenu = ({ stores, storeId }: MobileMenuProps) => {
                                     <div className="py-1 px-3">
                                     
                                         <SignOutButton>
-                                            <Button variant="ghost" className="px-6 border border-white/[0.2]">
+                                            <Button variant="outline" className="px-6 border border-white/[0.2]">
                                                 Sign-Out
                                             </Button>
                                         </SignOutButton>
